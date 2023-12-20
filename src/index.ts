@@ -43,8 +43,8 @@ app.use(logger('dev'))
 app.use(express.json())
 app.use(express.urlencoded({ extended: false }))
 app.use(cookieParser())
-// app.use(express.static(path.join(__dirname, 'public')))
-// app.use(express.static(path.join(__dirname, 'static')))
+app.use(express.static(path.join(__dirname, 'public')))
+app.use(express.static(path.join(__dirname, 'static')))
 
 /**
  * Get port from environment and store in Express.
@@ -53,7 +53,7 @@ app.use(cookieParser())
  * because containers don't have that issue :)
  */
 
-const port = normalizePort(process?.env?.HOSTCONFIG_HTTP_PORT || '8080')
+const port = normalizePort(process?.env?.PORT || '8080')
 app.set('port', port)
 
 /**

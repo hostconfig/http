@@ -26,7 +26,9 @@ FROM base as deps
 RUN --mount=type=bind,source=package.json,target=package.json \
     --mount=type=bind,source=yarn.lock,target=yarn.lock \
     --mount=type=bind,source=tsconfig.json,target=tsconfig.json \
-    --mount=type=bind,source=index.ts,target=index.ts \
+    --mount=type=bind,source=src/index.ts,target=src/index.ts \
+    --mount=type=bind,source=test/healthcheck.ts,target=test/healthcheck.ts \
+    --mount=type=bind,source=test/sample.ts,target=test/sample.ts \
     --mount=type=cache,target=/root/.yarn \
     yarn install --production --frozen-lockfile
 
@@ -39,7 +41,9 @@ FROM deps as build
 RUN --mount=type=bind,source=package.json,target=package.json \
     --mount=type=bind,source=yarn.lock,target=yarn.lock \
     --mount=type=bind,source=tsconfig.json,target=tsconfig.json \
-    --mount=type=bind,source=index.ts,target=index.ts \
+    --mount=type=bind,source=src/index.ts,target=src/index.ts \
+    --mount=type=bind,source=test/healthcheck.ts,target=test/healthcheck.ts \
+    --mount=type=bind,source=test/sample.ts,target=test/sample.ts \
     --mount=type=cache,target=/root/.yarn \
     yarn install --frozen-lockfile
 
@@ -69,7 +73,8 @@ COPY --from=build /usr/src/hostconfig/http/dist ./dist
 
 # Files to be built
 COPY tsconfig.json .
-COPY index.ts .
+COPY src ./src
+COPY test ./test
 
 # check every 30s to ensure this service returns HTTP 200
 HEALTHCHECK --interval=30s \
@@ -77,7 +82,7 @@ HEALTHCHECK --interval=30s \
 
 # Expose the port that the application listens on.
 # Default to port 80 for node, and 9229 and 9230 (tests) for debug
-ARG PORT=80
+ARG PORT=8080
 ENV PORT $PORT
 EXPOSE $PORT 9229 9230
 

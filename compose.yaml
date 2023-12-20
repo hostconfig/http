@@ -11,5 +11,7 @@ services:
       MUST_BE_MAPPING: true
       # NODE_ENV: production
     ports:
-      - 80:80
-      - 9229:9230
+      # - 80:80
+      - 8080:8080
+      - 9229:9229
+      - 9230:9230
