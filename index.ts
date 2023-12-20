@@ -11,7 +11,7 @@ import debugLib from 'debug'
 import http from 'http'
 import createError from 'http-errors'
 import { URL } from 'url'
-// import path from 'path'
+import path from 'path'
 import cookieParser from 'cookie-parser'
 import logger from 'morgan'
 
@@ -28,15 +28,15 @@ const __dirname = new URL('.', import.meta.url).pathname // Will contain trailin
 const app = express()
 const debug = debugLib('http:server')
 
-// // view engine setup
-// app.set('views', path.join(__dirname, 'views'))
-// app.set('view engine', 'pug')
+// view engine setup
+app.set('views', path.join(__dirname, 'views'))
+app.set('view engine', 'pug')
 
 app.use(logger('dev'))
 app.use(express.json())
 app.use(express.urlencoded({ extended: false }))
 app.use(cookieParser())
-// app.use(express.static(path.join(__dirname, 'public')))
+app.use(express.static(path.join(__dirname, 'public')))
 // app.use(express.static(path.join(__dirname, 'static')))
 
 /**
@@ -50,12 +50,12 @@ app.set('port', port)
  * Validation
  */
 
-const pathValidationRules = [
-  body('title').notEmpty().withMessage('Title is required'),
-  body('description').notEmpty().withMessage('Description is required'),
-  body('completed').isBoolean().withMessage('Completed must be a boolean'),
-  // header('authorization').notEmpty().withMessage('Authorization is required'),
-]
+// const pathValidationRules = [
+  // body('title').notEmpty().withMessage('Title is required'),
+  // body('description').notEmpty().withMessage('Description is required'),
+  // body('completed').isBoolean().withMessage('Completed must be a boolean'),
+  // header('X-Hostconfig-Http-Server-Middleware-Response').notEmpty().withMessage('Middleware response header is required'),
+// ]
 
 /**
  * Middleware
@@ -63,9 +63,9 @@ const pathValidationRules = [
 
 app.use(function middleware(req: Request, res: Response, next: NextFunction) {
 
-  const date = new Date()
+  const date = Date.now()
 
-  res.setHeader('X-Hostconfig-Https-Server-Middleware-Response', `${date.getUTCDate()}`)
+  res.setHeader('X-Hostconfig-Http-Server-Middleware-Response', `'${date}'`)
   res.setHeader('X-Content-Type-Options', 'nosniff')
   res.setHeader('X-XSS-Protection', '1; mode=block')
   res.setHeader('Upgrade-Insecure-Requests', '1')
@@ -81,15 +81,15 @@ app.use(function middleware(req: Request, res: Response, next: NextFunction) {
  * Router
  */
 
-app.get('/', pathValidationRules, (req: Request, res: Response) => {
+app.get('/', /* pathValidationRules, */ (req: Request, res: Response) => {
 
-  const errors = validationResult(req)
+  // const errors = validationResult(req)
 
-  if (!errors.isEmpty()) {
-    return res.status(400).json({ errors: errors.array() })
-  }
+  // if (!errors.isEmpty()) {
+  //   return res.status(400).json({ errors: errors.array() })
+  // }
 
-  res.status(200).send('Hello world!');
+  res.render('index', { title: 'hostconfig/http' })
 })
 
 /**
