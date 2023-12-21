@@ -14,6 +14,17 @@ FROM node:${NODE_VERSION}-alpine as base
 # Set working directory for all build stages.
 WORKDIR /usr/src/hostconfig/http
 
+RUN <<EOF
+apk update
+apk add --no-interactive git
+EOF
+
+# RUN <<EOF
+# useradd -s /bin/bash -m vscode
+# groupadd docker
+# usermod -aG docker vscode
+# EOF
+
 
 ################################################################################
 # Create a stage for installing production dependecies.
@@ -27,8 +38,9 @@ RUN --mount=type=bind,source=package.json,target=package.json \
     --mount=type=bind,source=yarn.lock,target=yarn.lock \
     --mount=type=bind,source=tsconfig.json,target=tsconfig.json \
     --mount=type=bind,source=src/index.ts,target=src/index.ts \
-    --mount=type=bind,source=test/healthcheck.ts,target=test/healthcheck.ts \
-    --mount=type=bind,source=test/sample.ts,target=test/sample.ts \
+    --mount=type=bind,source=src/index.d.ts,target=src/index.d.ts \
+    --mount=type=bind,source=src/test/healthcheck.ts,target=src/test/healthcheck.ts \
+    --mount=type=bind,source=src/test/sample.ts,target=src/test/sample.ts \
     --mount=type=cache,target=/root/.yarn \
     yarn install --production --frozen-lockfile
 
@@ -42,10 +54,11 @@ RUN --mount=type=bind,source=package.json,target=package.json \
     --mount=type=bind,source=yarn.lock,target=yarn.lock \
     --mount=type=bind,source=tsconfig.json,target=tsconfig.json \
     --mount=type=bind,source=src/index.ts,target=src/index.ts \
-    --mount=type=bind,source=test/healthcheck.ts,target=test/healthcheck.ts \
-    --mount=type=bind,source=test/sample.ts,target=test/sample.ts \
+    --mount=type=bind,source=src/index.d.ts,target=src/index.d.ts \
+    --mount=type=bind,source=src/test/healthcheck.ts,target=src/test/healthcheck.ts \
+    --mount=type=bind,source=src/test/sample.ts,target=src/test/sample.ts \
     --mount=type=cache,target=/root/.yarn \
-    yarn install --frozen-lockfile
+    yarn install --production --frozen-lockfile
 
 # Copy the rest of the source files into the image.
 COPY . .
@@ -74,7 +87,7 @@ COPY --from=build /usr/src/hostconfig/http/dist ./dist
 # Files to be built
 COPY tsconfig.json .
 COPY src ./src
-COPY test ./test
+# COPY test ./test
 
 # check every 30s to ensure this service returns HTTP 200
 HEALTHCHECK --interval=30s \
