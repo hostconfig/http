@@ -9,7 +9,7 @@ import express, { Request, Response, NextFunction, Router } from 'express'
 // do and how Dockerfile layer ordering matters. If you mess up Dockerfile ordering
 // you'll see long build times on every code change + build. If done correctly,
 // code changes should be only a few seconds to build locally due to build cache.
-import { body, header, validationResult } from 'express-validator'
+// import { body, header, validationResult } from 'express-validator'
 import { readFileSync } from 'fs'
 import debugLib from 'debug'
 import http from 'http'
@@ -61,9 +61,9 @@ app.set('port', port)
  */
 
 // const pathValidationRules = [
-//   body('title').notEmpty().withMessage('Title is required'),
-//   body('description').notEmpty().withMessage('Description is required'),
-//   body('completed').isBoolean().withMessage('Completed must be a boolean'),
+//   // body('title').notEmpty().withMessage('Title is required'),
+//   // body('description').notEmpty().withMessage('Description is required'),
+//   // body('completed').isBoolean().withMessage('Completed must be a boolean'),
 //   header('X-Hostconfig-Http-Server-Middleware-Response').notEmpty().withMessage('Middleware response header is required'),
 // ]
 
@@ -91,7 +91,16 @@ app.use(function middleware(req: Request, res: Response, next: NextFunction) {
  * Router
  */
 
-app.get('/', /* pathValidationRules, */ (req: Request, res: Response) => {
+app.get('/', (req: Request, res: Response) => {
+
+  res.render('index', { title: 'hostconfig/http' })
+})
+
+app.get("/health", /* pathValidationRules, */ function(req: Request, res: Response) {
+
+  // do app logic here to determine if app is truly healthy
+  // you should return 200 if healthy, and anything else will fail
+  // if you want, you should be able to restrict this to localhost (include ipv4 and ipv6)
 
   // const errors = validationResult(req)
 
@@ -99,13 +108,6 @@ app.get('/', /* pathValidationRules, */ (req: Request, res: Response) => {
   //   return res.status(400).json({ errors: errors.array() })
   // }
 
-  res.render('index', { title: 'hostconfig/http' })
-})
-
-app.get("/health", function(req: Request, res: Response) {
-  // do app logic here to determine if app is truly healthy
-  // you should return 200 if healthy, and anything else will fail
-  // if you want, you should be able to restrict this to localhost (include ipv4 and ipv6)
   res.send("I am happy and healthy\n");
 });
 
