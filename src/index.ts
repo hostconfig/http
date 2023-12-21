@@ -4,23 +4,25 @@
  * Module dependencies.
  */
 
-import express, { Request, Response, NextFunction, Router } from 'express'
+import { Request, Response, NextFunction, Router } from 'express'
 // this example uses express web framework so we know what longer build times
 // do and how Dockerfile layer ordering matters. If you mess up Dockerfile ordering
 // you'll see long build times on every code change + build. If done correctly,
 // code changes should be only a few seconds to build locally due to build cache.
 // import { body, header, validationResult } from 'express-validator'
-import { readFileSync } from 'fs'
+// import { readFileSync } from 'fs'
 import debugLib from 'debug'
 import http from 'http'
 import createError from 'http-errors'
 import { URL } from 'url'
-import path from 'path'
-import cookieParser from 'cookie-parser'
-import logger from 'morgan'
+// import path from 'path'
+// import cookieParser from 'cookie-parser'
+// import logger from 'morgan'
 // morgan provides easy logging for express, and by default it logs to stdout
 // which is a best practice in Docker. Friends don't let friends code their apps to
 // do app logging to files in containers.
+
+import { app } from '@hostconfig/app'
 
 type Route = {
   path: string;
@@ -32,19 +34,19 @@ type Routes = Route[]
 const __filename = new URL('', import.meta.url).pathname
 const __dirname = new URL('.', import.meta.url).pathname // Will contain trailing slash
 
-export const app = express()
-const debug = debugLib('http:server')
+// export const app = express()
+const debug = debugLib('hostconfig:http')
 
-// view engine setup
-app.set('views', path.join(__dirname, 'views'))
-app.set('view engine', 'pug')
+// // view engine setup
+// app.set('views', path.join(__dirname, 'views'))
+// app.set('view engine', 'pug')
 
-app.use(logger('dev'))
-app.use(express.json())
-app.use(express.urlencoded({ extended: false }))
-app.use(cookieParser())
-app.use(express.static(path.join(__dirname, 'public')))
-app.use(express.static(path.join(__dirname, 'static')))
+// app.use(logger('dev'))
+// app.use(express.json())
+// app.use(express.urlencoded({ extended: false }))
+// app.use(cookieParser())
+// app.use(express.static(path.join(__dirname, 'public')))
+// app.use(express.static(path.join(__dirname, 'static')))
 
 /**
  * Get port from environment and store in Express.
@@ -253,3 +255,5 @@ function shutdown() {
 // https://github.com/npm/npm/issues/4603
 // https://github.com/npm/npm/pull/10868
 // https://github.com/RisingStack/kubernetes-graceful-shutdown-example/blob/master/src/index.js
+
+export default server

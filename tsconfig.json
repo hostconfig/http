@@ -13,8 +13,8 @@
     "strict": true,
     "forceConsistentCasingInFileNames": true,
     "noFallthroughCasesInSwitch": true,
-    "module": "esnext",
-    "moduleResolution": "node",
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
     "resolveJsonModule": true,
     "isolatedModules": true,
     "jsx": "preserve",
@@ -25,8 +25,7 @@
     }
   },
   "include": [
-    "./src",
-    "./test"
+    "src",
 	],
   "exclude": [
 		"node_modules"
