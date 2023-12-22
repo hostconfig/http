@@ -41,8 +41,12 @@ RUN --mount=type=bind,source=package.json,target=package.json \
     --mount=type=bind,source=src/index.d.ts,target=src/index.d.ts \
     --mount=type=bind,source=src/test/healthcheck.ts,target=src/test/healthcheck.ts \
     --mount=type=bind,source=src/test/sample.ts,target=src/test/sample.ts \
+    --mount=type=bind,source=views/error.pug,target=views/error.pug \
+    --mount=type=bind,source=views/index.pug,target=views/index.pug \
+    --mount=type=bind,source=views/user.pug,target=views/user.pug \
+    --mount=type=bind,source=views/layout.pug,target=views/layout.pug \
     --mount=type=cache,target=/root/.yarn \
-    yarn
+    yarn install --frozen-lockfile
 
 ################################################################################
 # Create a stage for building the application.
@@ -57,11 +61,16 @@ RUN --mount=type=bind,source=package.json,target=package.json \
     --mount=type=bind,source=src/index.d.ts,target=src/index.d.ts \
     --mount=type=bind,source=src/test/healthcheck.ts,target=src/test/healthcheck.ts \
     --mount=type=bind,source=src/test/sample.ts,target=src/test/sample.ts \
+    --mount=type=bind,source=views/error.pug,target=views/error.pug \
+    --mount=type=bind,source=views/index.pug,target=views/index.pug \
+    --mount=type=bind,source=views/user.pug,target=views/user.pug \
+    --mount=type=bind,source=views/layout.pug,target=views/layout.pug \
     --mount=type=cache,target=/root/.yarn \
-    yarn
+    yarn install --frozen-lockfile
 
 # Copy the rest of the source files into the image.
 COPY . .
+COPY views ./views
 
 # Run the build script.
 RUN yarn run build
