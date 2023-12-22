@@ -4,7 +4,7 @@
 # https://docs.docker.com/compose/compose-file/
 
 services:
-  http:
+  server:
     build:
       context: .
     environment:

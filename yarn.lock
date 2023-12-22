@@ -28,7 +28,7 @@
 
 "@hostconfig/app@https://github.com/hostconfig/app":
   version "0.0.0"
-  resolved "https://github.com/hostconfig/app#2d0cff3b9455afd440e0ecca3d923eb1a61ee2a4"
+  resolved "https://github.com/hostconfig/app#172fd1e257479b2eec4fa05a38019637fe4a2987"
   dependencies:
     cookie-parser "^1.4.6"
     cors "^2.8.5"
@@ -42,6 +42,7 @@
     rimraf "^5.0.5"
     ts-add-js-extension "^1.6.0"
     tsc-alias "^1.8.8"
+    typescript "^5.3.3"
 
 "@isaacs/cliui@^8.0.2":
   version "8.0.2"

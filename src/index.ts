@@ -22,7 +22,7 @@ import { URL } from 'url'
 // which is a best practice in Docker. Friends don't let friends code their apps to
 // do app logging to files in containers.
 
-import { app } from '@hostconfig/app'
+import app from '@hostconfig/app'
 
 type Route = {
   path: string;

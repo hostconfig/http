@@ -42,7 +42,7 @@ RUN --mount=type=bind,source=package.json,target=package.json \
     --mount=type=bind,source=src/test/healthcheck.ts,target=src/test/healthcheck.ts \
     --mount=type=bind,source=src/test/sample.ts,target=src/test/sample.ts \
     --mount=type=cache,target=/root/.yarn \
-    yarn install --production --frozen-lockfile
+    yarn
 
 ################################################################################
 # Create a stage for building the application.
@@ -58,7 +58,7 @@ RUN --mount=type=bind,source=package.json,target=package.json \
     --mount=type=bind,source=src/test/healthcheck.ts,target=src/test/healthcheck.ts \
     --mount=type=bind,source=src/test/sample.ts,target=src/test/sample.ts \
     --mount=type=cache,target=/root/.yarn \
-    yarn install --production --frozen-lockfile
+    yarn
 
 # Copy the rest of the source files into the image.
 COPY . .
