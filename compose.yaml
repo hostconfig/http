@@ -15,3 +15,4 @@ services:
       - 8080:8080
       - 9229:9229
       - 9230:9230
+    restart: always
